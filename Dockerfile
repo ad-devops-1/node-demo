@@ -9,7 +9,7 @@ COPY . /usr/src/app
 
 # Install app node dependencies
 #COPY package.json /usr/src/app
-RUN npm install
+#RUN npm install
 
 EXPOSE 7000
 CMD ["npm", "start"]
