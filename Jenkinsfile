@@ -51,6 +51,7 @@ spec:
           } //script
         } //container
       } //steps
+}
     stage ('Build and Test') {
       steps {
         sh '''
