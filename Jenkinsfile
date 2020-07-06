@@ -32,12 +32,11 @@ spec:
       steps {
         container('dind') {
           script {
-            //we need some extra packages installing
             sh 'apk -Uuv add make groff less python py-pip'
-//we need the AWS command line tools
             sh 'pip install awscli'
-}
-}
-}
-}
-}
+          } //script
+        } //container
+      } //steps
+    } //stage(build)
+  } //stages
+} //pipeline
