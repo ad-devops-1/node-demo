@@ -52,6 +52,7 @@ spec:
       } //steps
 }
     stage ('Build and Test') {
+        container('dind') {
       steps {
         sh '''
         docker build --network=host \
@@ -61,7 +62,9 @@ spec:
         '''
       }
     }
+    }
     stage ('Artefact') {
+        container('dind') {
       steps {
         sh '''
         apt update && apt install python-pip -y && pip install awscli && aws --version
@@ -70,7 +73,9 @@ spec:
         '''
         }
     }
+    }
     stage ('Deploy') {
+        container('dind') {
       steps {
         sh '''
         CLUSTER_NAME=scikiq-non-prod
@@ -86,6 +91,7 @@ spec:
         helm upgrade --install node-demo node-demo --set image.repository=878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo --set image.tag=${BUILD_NUMBER}
         '''
       }
+    }
     }
 // slack notification configuration
   stage('Error') {
