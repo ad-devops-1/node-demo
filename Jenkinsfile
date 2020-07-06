@@ -46,7 +46,12 @@ spec:
       steps {
         container('dind') {
           script {
-            sh 'echo "success"'
+            sh '''
+            docker build --network=host \
+            -t ${DOCKER_REPO}:${BUILD_NUMBER} .
+            #put your Test cases
+            echo 'Starting test cases'
+            '''
           } //script
         } //container
       } //steps
