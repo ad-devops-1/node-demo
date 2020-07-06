@@ -74,7 +74,6 @@ spec:
         } //container
       } //steps
 }
-  }
 //     stage ('Build and Test') {
 //       steps {
 //         container('dind') {
@@ -118,35 +117,32 @@ spec:
 //     }
 //     }
 // // slack notification configuration
-//   stage('Error') {
-//     // when doError is equal to 1, return an error
-//     when {
-//         expression { doError == '1' }
-//     }
-//     steps {
-//         echo "Failure :("
-//         error "Test failed on purpose, doError == str(1)"
-//     }
-// }
-//   }
-//   stage('Success') {
-//     // when doError is equal to 0, just print a simple message
-//     when {
-//         expression { doError == '0' }
-//     }
-//     steps {
-//       container('dind') {
-//         echo "Success :)"
-//     }
-// }
-//   }
-//   }
-//     // Post-build actions
-//   post {
-//       always {
-//           slackSend channel: '#test123',
-//               color: COLOR_MAP[currentBuild.currentResult],
-//               message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} More info at: https://jenkins.squareops.com/blue/organizations/jenkins/$JOB_BASE_NAME/detail/$JOB_BASE_NAME/$BUILD_NUMBER"
-//       }
-//   }
+  stage('Error') {
+    // when doError is equal to 1, return an error
+    when {
+        expression { doError == '1' }
+    }
+    steps {
+        echo "Failure :("
+        error "Test failed on purpose, doError == str(1)"
+    }
+}
+  stage('Success') {
+    // when doError is equal to 0, just print a simple message
+    when {
+        expression { doError == '0' }
+    }
+    steps {
+        echo "Success :)"
+}
+  }
+}
+    // Post-build actions
+  post {
+      always {
+          slackSend channel: '#test123',
+              color: COLOR_MAP[currentBuild.currentResult],
+              message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} More info at: https://jenkins.squareops.com/blue/organizations/jenkins/$JOB_BASE_NAME/detail/$JOB_BASE_NAME/$BUILD_NUMBER"
+      }
+  }
 } //pipeline
