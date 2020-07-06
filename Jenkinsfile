@@ -60,6 +60,11 @@ spec:
             echo 'Start deploying'
             CLUSTER_NAME=scikiq-non-prod
             aws eks --region $AWS_DEFAULT_REGION  update-kubeconfig --name ${CLUSTER_NAME}
+            VERSION=v3.2.4
+            echo $VERSION
+            FILENAME=helm-${VERSION}-linux-amd64.tar.gz
+            HELM_URL=https://get.helm.sh/${FILENAME}
+            echo $HELM_URL
             curl -o /tmp/$FILENAME ${HELM_URL} \
             && tar -zxvf /tmp/${FILENAME} -C /tmp \
             && mv /tmp/linux-amd64/helm /bin/helm \
