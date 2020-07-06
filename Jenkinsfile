@@ -1,4 +1,10 @@
-stages {
+pipeline {
+  agent none
+//check every minute for changes
+  triggers {
+    pollSCM('*/1 * * * *')
+  }
+  stages {
     //Build container image
     stage('Build') {
       agent {
@@ -23,8 +29,7 @@ spec:
 """
         }
       }
-
- steps {
+      steps {
         container('dind') {
           script {
             //we need some extra packages installing
