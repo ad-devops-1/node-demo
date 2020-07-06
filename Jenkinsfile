@@ -46,7 +46,7 @@ spec:
       steps {
         container('dind') {
           script {
-    ENV= """${sh(
+    ENV= """${/bin/bash(
   		returnStdout: true,
   		script: 'declare -n ENV=${GIT_BRANCH}_env ; echo "$ENV"'
 	  ).trim()}"""
