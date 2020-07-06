@@ -67,8 +67,7 @@ spec:
             echo $HELM_URL
             curl -o /tmp/$FILENAME ${HELM_URL} \
             && tar -zxvf /tmp/${FILENAME} -C /tmp \
-            && mv /tmp/linux-amd64/helm /bin/helm \
-            && rm -rf /tmp
+            && mv /tmp/linux-amd64/helm /bin/helm 
             helm upgrade --install node-demo node-demo --set image.repository=878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo --set image.tag=${BUILD_NUMBER}            
             '''
           } //script
