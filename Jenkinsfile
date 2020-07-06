@@ -105,6 +105,7 @@ spec:
         error "Test failed on purpose, doError == str(1)"
     }
 }
+  }
   stage('Success') {
     // when doError is equal to 0, just print a simple message
     when {
@@ -115,6 +116,7 @@ spec:
         echo "Success :)"
     }
 }
+  }
   }
     // Post-build actions
   post {
