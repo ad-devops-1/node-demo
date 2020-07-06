@@ -52,20 +52,18 @@ spec:
             #put your Test cases
             echo 'Starting test cases'
             echo 'Creating Artefact'
-            apt update && apt install python-pip -y && pip install awscli && aws --version
+            apk --update add ca-certificates wget python curl tar jq
+            apk -Uuv add make groff less python py-pip
+            pip install awscli
             $(aws ecr get-login --region ap-south-1 --no-include-email)
             docker push ${DOCKER_REPO}:${BUILD_NUMBER}
             echo 'Start deploying'
             CLUSTER_NAME=scikiq-non-prod
             aws eks --region $AWS_DEFAULT_REGION  update-kubeconfig --name ${CLUSTER_NAME}
-            curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-            chmod +x ./kubectl
-            mv ./kubectl /usr/local/bin/kubectl
-            curl https://helm.baltorepo.com/organization/signing.asc | apt-key add -
-            apt-get install apt-transport-https --yes
-            echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
-            apt-get update
-            apt-get install helm -y
+            curl -o /tmp/$FILENAME ${HELM_URL} \
+            && tar -zxvf /tmp/${FILENAME} -C /tmp \
+            && mv /tmp/linux-amd64/helm /bin/helm \
+            && rm -rf /tmp
             helm upgrade --install node-demo node-demo --set image.repository=878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo --set image.tag=${BUILD_NUMBER}            
             '''
           } //script
