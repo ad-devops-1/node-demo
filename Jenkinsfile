@@ -10,10 +10,6 @@ pipeline {
     DOCKER_REPO = "878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo"
     AWS_DEFAULT_REGION = "ap-south-1"
     HELM_RELEASE_NAME = "node-demo"
-    { ENV= """${sh(
-  		returnStdout: true,
-  		script: 'declare -n ENV=${GIT_BRANCH}_env ; echo "$ENV"'
-	  ).trim()}""" }
   }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20'))
@@ -50,6 +46,10 @@ spec:
       steps {
         container('dind') {
           script {
+    ENV= """${sh(
+  		returnStdout: true,
+  		script: 'ENV=${GIT_BRANCH}_env ; echo "$ENV"'
+	  ).trim()}""" 
             sh '''
             docker build --network=host \
             -t ${DOCKER_REPO}:${BUILD_NUMBER} .
@@ -62,6 +62,8 @@ spec:
             $(aws ecr get-login --region ap-south-1 --no-include-email)
             docker push ${DOCKER_REPO}:${BUILD_NUMBER}
             echo 'Start deploying'
+            abc=${ENV}_cluster
+            echo $abc
             CLUSTER_NAME=scikiq-non-prod
             aws eks --region $AWS_DEFAULT_REGION  update-kubeconfig --name ${CLUSTER_NAME}
             VERSION=v3.2.4
