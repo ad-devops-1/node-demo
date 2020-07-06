@@ -46,8 +46,7 @@ spec:
       steps {
         container('dind') {
           script {
-            sh 'apk -Uuv add make groff less python py-pip'
-            sh 'pip install awscli'
+            sh 'echo "success"'
           } //script
         } //container
       } //steps
