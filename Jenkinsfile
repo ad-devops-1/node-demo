@@ -10,6 +10,10 @@ pipeline {
     DOCKER_REPO = "878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo"
     AWS_DEFAULT_REGION = "ap-south-1"
     HELM_RELEASE_NAME = "node-demo"
+    ENV= """${sh(
+  		returnStdout: true,
+  		script: 'declare -n ENV=${GIT_BRANCH}_env ; echo "$ENV"'
+	  ).trim()}"""
   }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20'))
