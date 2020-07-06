@@ -10,6 +10,10 @@ pipeline {
     DOCKER_REPO = "878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo"
     AWS_DEFAULT_REGION = "ap-south-1"
     HELM_RELEASE_NAME = "node-demo"
+    ENV= """${sh(
+  		returnStdout: true,
+  		script: 'declare -n ENV=${GIT_BRANCH}_env ; echo "$ENV"'
+	  ).trim()}"""
   }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20'))
@@ -74,49 +78,7 @@ spec:
         } //container
       } //steps
 }
-//     stage ('Build and Test') {
-//       steps {
-//         container('dind') {
-//         sh '''
-//         docker build --network=host \
-//         -t ${DOCKER_REPO}:${BUILD_NUMBER} .
-//         #put your Test cases
-//         echo 'Starting test cases'
-//         '''
-//       }
-//     }
-//     }
-//     stage ('Artefact') {
-//       steps {
-//         container('dind') {
-//         sh '''
-//         apt update && apt install python-pip -y && pip install awscli && aws --version
-//         $(aws ecr get-login --region ap-south-1 --no-include-email)
-//         docker push ${DOCKER_REPO}:${BUILD_NUMBER}
-//         '''
-//         }
-//     }
-//     }
-//     stage ('Deploy') {
-//       steps {
-//         container('dind') {
-//         sh '''
-//         CLUSTER_NAME=scikiq-non-prod
-//         aws eks --region $AWS_DEFAULT_REGION  update-kubeconfig --name ${CLUSTER_NAME}
-//         curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-//         chmod +x ./kubectl
-//         mv ./kubectl /usr/local/bin/kubectl
-//         curl https://helm.baltorepo.com/organization/signing.asc | apt-key add -
-//         apt-get install apt-transport-https --yes
-//         echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
-//         apt-get update
-//         apt-get install helm -y
-//         helm upgrade --install node-demo node-demo --set image.repository=878291833136.dkr.ecr.ap-south-1.amazonaws.com/node-demo --set image.tag=${BUILD_NUMBER}
-//         '''
-//       }
-//     }
-//     }
-// // slack notification configuration
+// slack notification configuration
   stage('Error') {
     // when doError is equal to 1, return an error
     when {
