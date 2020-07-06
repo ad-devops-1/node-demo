@@ -31,3 +31,8 @@ spec:
             sh 'apk -Uuv add make groff less python py-pip'
 //we need the AWS command line tools
             sh 'pip install awscli'
+}
+}
+}
+}
+}
