@@ -52,8 +52,8 @@ spec:
       } //steps
 }
     stage ('Build and Test') {
-        container('dind') {
       steps {
+        container('dind') {
         sh '''
         docker build --network=host \
         -t ${DOCKER_REPO}:${BUILD_NUMBER} .
@@ -64,8 +64,8 @@ spec:
     }
     }
     stage ('Artefact') {
-        container('dind') {
       steps {
+        container('dind') {
         sh '''
         apt update && apt install python-pip -y && pip install awscli && aws --version
         $(aws ecr get-login --region ap-south-1 --no-include-email)
@@ -75,8 +75,8 @@ spec:
     }
     }
     stage ('Deploy') {
-        container('dind') {
       steps {
+        container('dind') {
         sh '''
         CLUSTER_NAME=scikiq-non-prod
         aws eks --region $AWS_DEFAULT_REGION  update-kubeconfig --name ${CLUSTER_NAME}
@@ -100,6 +100,7 @@ spec:
         expression { doError == '1' }
     }
     steps {
+      container('dind') {
         echo "Failure :("
         error "Test failed on purpose, doError == str(1)"
     }
@@ -110,6 +111,7 @@ spec:
         expression { doError == '0' }
     }
     steps {
+      container('dind') {
         echo "Success :)"
     }
 }
