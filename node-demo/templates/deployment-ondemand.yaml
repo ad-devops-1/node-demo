@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "node-demo.fullname" . }}
+  name: {{ include "node-demo-stateful.fullname" . }}
   labels:
     {{- include "node-demo.labels" . | nindent 4 }}
 spec:
