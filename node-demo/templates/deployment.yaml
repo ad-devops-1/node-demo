@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "node-demo.fullname" . }}
+  name: {{ include "node-demo-stateless.fullname" . }}
   labels:
     {{- include "node-demo.labels" . | nindent 4 }}
 spec:
@@ -26,3 +26,5 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+      nodeSelector:
+        lifecycle: Ec2Spot
